@@ -1,0 +1,28 @@
+{
+  "name": "examen-spe-dev-web-1-cyril-bartz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BartzCyril/Examen-Spe-Dev-Web-1-Cyril-BARTZ.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BartzCyril/Examen-Spe-Dev-Web-1-Cyril-BARTZ/issues"
+  },
+  "homepage": "https://github.com/BartzCyril/Examen-Spe-Dev-Web-1-Cyril-BARTZ#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "method-override": "^3.0.0"
+  }
+}
