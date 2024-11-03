@@ -1,7 +1,5 @@
 # Examen-Spe-Dev-Web-1-Cyril-BARTZ
 
-# Projet Authentification
-
 Voici quelques instructions pour vous aider à utiliser notre projet.
 
 ## Installer les dépendances
