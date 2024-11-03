@@ -1,14 +1,14 @@
 const express = require('express');
 const countries = express.Router();
 const loggedMiddleware = require('../middlewares/logged');
-const adminMiddleware = require('../middlewares/admin');
+const associationMiddleware = require('../middlewares/association');
 const Country = require('../helper/Country');
 
 countries.get('/', loggedMiddleware, (req, res) => {
     res.send(Country.getAll());
 });
 
-countries.put('/update', adminMiddleware, async (req, res) => {
+countries.put('/update', associationMiddleware, async (req, res) => {
     const data = req.body;
 
     if (!data) {
@@ -26,7 +26,7 @@ countries.put('/update', adminMiddleware, async (req, res) => {
     res.status(update.status).send(update.data);
 });
 
-countries.get('/update/:id', adminMiddleware, (req, res) => {
+countries.get('/update/:id', associationMiddleware, (req, res) => {
     const id = parseInt(req.params.id);
 
     if (!id) {

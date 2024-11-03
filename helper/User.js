@@ -50,7 +50,7 @@ const User = {
 
                 return {
                     error: false,
-                    data: { username, isAdmin: false },
+                    data: { username, isAdmin: false, isMemberOfAssociation: false },
                     status: 201
                 };
             }
@@ -168,7 +168,7 @@ const User = {
 
         return {
             error: false,
-            data: {username: user.username, isAdmin: user.role === 'admin'},
+            data: {username: user.username, isAdmin: user.role === 'admin', isMemberOfAssociation: (user.role === 'association' || user.role === 'admin')},
             status: 200
         }
     },

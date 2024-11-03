@@ -17,6 +17,7 @@
             <select name="role_<%= user.username %>"
                     class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                <option value="association" <%= user.role === 'association' ? 'selected' : '' %>>Association</option>
                 <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
             </select>
             <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"

@@ -26,6 +26,7 @@ authentication.post('/login', async (req, res) => {
     }
     req.session.user = createUser.data.username;
     req.session.isAdmin = createUser.data.isAdmin;
+    req.session.isMemberOfAssociation = createUser.data.isMemberOfAssociation;
     req.session.loggedIn = true;
 
     res.redirect('/countries');
