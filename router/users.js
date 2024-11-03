@@ -5,12 +5,14 @@ const adminMiddleware = require('../middlewares/admin');
 
 users.get('/', adminMiddleware, async (req, res) => {
     const users = User.getAll();
-    res.status(200).render('users', users.map(user => {
-        return {
-            username: user.username,
-            role: user.role
-        }
-    }));
+    res.status(200).render('users', {
+        users: users.data.map(user => {
+            return {
+                username: user.username,
+                role: user.role
+            }
+        }).filter(user => user.username !== req.session.user)
+    });
 });
 
 users.put('/', adminMiddleware, async (req, res) => {
@@ -22,7 +24,7 @@ users.put('/', adminMiddleware, async (req, res) => {
         return;
     }
 
-    res.status(updateRole.status).redirect('/users');
+    res.status(updateRole.status).send(updateRole.data);
 });
 
 users.delete('/:username', adminMiddleware, async (req, res) => {
@@ -34,5 +36,7 @@ users.delete('/:username', adminMiddleware, async (req, res) => {
         return;
     }
 
-    res.status(deleteUser.status).redirect('/users');
+    res.status(303).send(deleteUser.message);
 });
+
+module.exports = users;

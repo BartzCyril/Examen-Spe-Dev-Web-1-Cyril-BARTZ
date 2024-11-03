@@ -3,10 +3,27 @@ const countries = express.Router();
 const loggedMiddleware = require('../middlewares/logged');
 const adminMiddleware = require('../middlewares/admin');
 const Country = require('../helper/Country');
-const ObjectHelper = require('../helper/Object');
 
 countries.get('/', loggedMiddleware, (req, res) => {
     res.send(Country.getAll());
+});
+
+countries.put('/update', adminMiddleware, async (req, res) => {
+    const data = req.body;
+
+    if (!data) {
+        res.status(400).send('Data is required');
+        return;
+    }
+
+    const update = await Country.update(data);
+
+    if (update.error) {
+        res.status(update.status).send(update.message);
+        return;
+    }
+
+    res.status(update.status).send(update.data);
 });
 
 countries.get('/update/:id', adminMiddleware, (req, res) => {
@@ -20,25 +37,11 @@ countries.get('/update/:id', adminMiddleware, (req, res) => {
     const result = Country.get(id);
 
     if (result.error) {
-        res.status(result.status).render('countries', {error: result.message});
+        res.status(result.status).send(result.message);
         return;
     }
 
     res.render('countries', {data: result.data});
-});
-
-countries.post('/update', adminMiddleware, async (req, res) => {
-    const data = req.body;
-    delete data._method;
-    const reconstructData = ObjectHelper.reconstruct(data);
-    const update = await Country.update(reconstructData);
-
-    if (update.error) {
-        res.status(update.status).send(update.message);
-        return;
-    }
-
-    res.status(update.status).redirect('/countries/update/' + reconstructData.ccn3);
 });
 
 countries.get('/:id/:type', loggedMiddleware, (req, res) => {

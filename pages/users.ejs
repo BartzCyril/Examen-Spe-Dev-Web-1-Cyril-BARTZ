@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Users</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)">
+
+<% if (users.length === 0) { %>
+    <p>No users found.</p>
+<% } else { %>
+    <% users.forEach(function(user) { %>
+        <div>
+            <p><%= user.username %></p>
+            <select name="role_<%= user.username %>"
+                    class="border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+            </select>
+            <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    onclick="updateUser('<%= user.username %>')">Update
+            </button>
+            <button class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    onclick="deleteUser('<%= user.username %>')">Delete
+            </button>
+        </div>
+    <% }); %>
+<% } %>
+
+<script>
+    function updateUser(username) {
+        fetch('/users', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                role: document.querySelector('select[name="role_' + username + '"]').value
+            })
+        }).then(() => {window.alert('User updated successfully');
+        }).catch(err => console.error(err));
+    }
+
+    function deleteUser(username) {
+        fetch('/users/' + username, {
+            method: 'DELETE'
+        }).then(() => {
+            window.location.reload();
+        }).catch(err => console.error(err));
+    }
+</script>
+</body>
+</html>

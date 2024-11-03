@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const usersData = require("../data/users.json");
-const countries = require("../data/countries.json");
+
 const Country = {
     /**
      * Retrieves all countries data.
@@ -74,7 +73,7 @@ const Country = {
         const country = Country.get(id);
 
         if (!country.error) {
-            const {name, cca2, cca3, currencies, languages, flag, capital, population, continent} = country.data;
+            const {name, cca2, cca3, currencies, languages, flag, capital, population, continents} = country.data;
             return {
                 error: false,
                 data: {
@@ -86,7 +85,7 @@ const Country = {
                     flag,
                     capital,
                     population,
-                    continent
+                    continents
                 }
             }
         }
@@ -187,6 +186,14 @@ const Country = {
      * @property {Object[]} [data] - The updated list of countries if the operation was successful.
      */
     update: async (data) => {
+        if (!data.ccn3) {
+            return {
+                error: true,
+                message: 'Country ID is required',
+                status: 400
+            }
+        }
+
         const countries = require('../data/countries.json');
         const country = countries.find(country => country.ccn3 === data.ccn3);
 
@@ -199,7 +206,7 @@ const Country = {
         }
 
         const index = countries.indexOf(country);
-        countries[index] = data;
+        countries[index] = {...country, ...data};
 
         await fs.writeFile(path.join(__dirname, '../data/countries.json'), JSON.stringify(countries), (err) => {
             if (err) {

@@ -1,6 +1,5 @@
 const express = require('express');
 const expressSession = require('express-session');
-const methodOverride = require('method-override');
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './pages');
@@ -17,7 +16,6 @@ const appProperties = {
     }
 }
 
-app.use(methodOverride('_method'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -25,6 +23,7 @@ app.use(
 );
 app.use('/countries', require('./router/countries'));
 app.use('/authentication', require('./router/authentication'));
+app.use('/users', require('./router/users'));
 
 app.listen(appProperties.port, () => {
     console.log(`Server is running on port ${appProperties.port}`);
