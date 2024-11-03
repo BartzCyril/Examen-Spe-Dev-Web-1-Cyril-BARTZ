@@ -1,3 +1,7 @@
+/////////////////////////////////////////////////////////////////////
+///TESTS UNITAIRES
+/////////////////////////////////////////////////////////////////////
+
 const Country = require('../helper/Country');
 
 test('Get all countries', () => {
@@ -313,4 +317,57 @@ test('Update a country with invalid data', async () => {
     expect(update.error).toBe(true);
     expect(update.status).toBe(400);
     expect(update.message).toBe('Country ID is required');
+});
+
+/////////////////////////////////////////////////////////////////////
+///TESTS FONCTIONNELS
+/////////////////////////////////////////////////////////////////////
+
+const countries = require('../router/countries');
+const express = require("express");
+const request = require("supertest");
+
+jest.mock('../middlewares/logged', () => jest.fn((req, res, next) => next()));
+
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/countries', countries);
+
+describe('GET /countries/:id/:type', () => {
+    it('should return 404 if country not found', async () => {
+        const response = await request(app).get('/countries/123/full');
+        console.log(response);
+        expect(response.status).toBe(404);
+        expect(response.text).toBe('Country not found');
+    });
+
+    it('should return full data of a country', async () => {
+        const response = await request(app).get('/countries/250/full');
+        console.log(response)
+        expect(response.status).toBe(200);
+    });
+
+    it('should return normal data of a country', async () => {
+        const response = await request(app).get('/countries/250/normal');
+        expect(response.status).toBe(200);
+        expect(response.body.name).toBeDefined();
+        expect(response.body.cca2).toBeDefined();
+        expect(response.body.cca3).toBeDefined();
+        expect(response.body.currencies).toBeDefined();
+        expect(response.body.languages).toBeDefined();
+        expect(response.body.flag).toBeDefined();
+        expect(response.body.capital).toBeDefined();
+        expect(response.body.population).toBeDefined();
+        expect(response.body.continents).toBeDefined();
+    });
+
+    it('should return short data of a country', async () => {
+        const response = await request(app).get('/countries/250/short');
+        expect(response.status).toBe(200);
+        expect(response.body.name).toBeDefined();
+        expect(response.body.cca2).toBeDefined();
+        expect(response.body.cca3).toBeDefined();
+        expect(response.body.flag).toBeDefined();
+    });
 });
